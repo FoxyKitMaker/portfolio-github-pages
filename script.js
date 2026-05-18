@@ -222,52 +222,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Enviando...';
 
-        // Usamos un formulario nativo para evitar errores de CORS y permitir
-        // que FormSubmit muestre su página de Activación o Captcha en una pestaña nueva.
+        // Usamos mailto: nativo porque el servicio externo (FormSubmit)
+        // parece estar bloqueado o caído (DNS_PROBE_FINISHED_NXDOMAIN).
+        // mailto: garantiza que siempre funcione usando la app de correo del usuario.
         setTimeout(() => {
-            const tempForm = document.createElement('form');
-            tempForm.action = "https://formsubmit.co/rcarrerac01@gmail.com";
-            tempForm.method = "POST";
-            tempForm.target = "_blank"; // Abre en nueva pestaña para no romper la SPA
-
-            // Configuración adicional de FormSubmit
-            const nextInput = document.createElement('input');
-            nextInput.type = 'hidden';
-            nextInput.name = '_next';
-            nextInput.value = window.location.href; // Redirige de vuelta (opcional)
-
-            const subjectInput = document.createElement('input');
-            subjectInput.type = 'hidden';
-            subjectInput.name = '_subject';
-            subjectInput.value = "Nuevo mensaje de contacto desde tu Portfolio!";
-
-            const nameInput = document.createElement('input');
-            nameInput.type = 'hidden';
-            nameInput.name = 'Nombre';
-            nameInput.value = name;
-
-            const emailInput = document.createElement('input');
-            emailInput.type = 'hidden';
-            emailInput.name = 'Email';
-            emailInput.value = email;
-
-            const messageInput = document.createElement('input');
-            messageInput.type = 'hidden';
-            messageInput.name = 'Mensaje';
-            messageInput.value = message;
-
-            tempForm.appendChild(nextInput);
-            tempForm.appendChild(subjectInput);
-            tempForm.appendChild(nameInput);
-            tempForm.appendChild(emailInput);
-            tempForm.appendChild(messageInput);
-
-            document.body.appendChild(tempForm);
-            tempForm.submit();
-            document.body.removeChild(tempForm);
+            const subject = encodeURIComponent(`Nuevo contacto desde tu Portfolio: ${name}`);
+            const body = encodeURIComponent(`${message}\n\n---\nEnviado por: ${name}\nEmail: ${email}`);
+            
+            // Abre el cliente de correo nativo
+            window.location.href = `mailto:rcarrerac01@gmail.com?subject=${subject}&body=${body}`;
 
             // Simulamos éxito en la interfaz visual
-            btn.innerHTML = '<i class="fas fa-check"></i> Redirigiendo...';
+            btn.innerHTML = '<i class="fas fa-check"></i> Abriendo correo...';
             btn.classList.replace('from-violet-600', 'from-emerald-500');
             btn.classList.replace('to-cyan-500', 'to-teal-500');
             
