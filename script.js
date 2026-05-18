@@ -130,20 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // 6. Magnetic Effect
-    const magneticBtns = document.querySelectorAll('.magnetic-btn');
-    magneticBtns.forEach(btn => {
-        btn.addEventListener('mousemove', (e) => {
-            const rect = btn.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            // Move 30% of delta
-            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
-        });
-        btn.addEventListener('mouseleave', () => {
-            btn.style.transform = '';
-        });
-    });
+
 
 
     // 7. Hero Glow Mouse Tracking
@@ -222,26 +209,34 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start typing
     setTimeout(type, 1000);
 
-    // 10. Form Validation
+    // 10. Form Validation & Mailto
     const form = document.getElementById('contactForm');
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         const btn = form.querySelector('button[type="submit"]');
         const originalText = btn.innerHTML;
+        
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
 
-        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Enviando...';
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Preparando...';
 
         setTimeout(() => {
-            btn.innerHTML = '<i class="fas fa-check"></i> Enviado con éxito';
+            const subject = encodeURIComponent(`Nuevo contacto desde tu Portfolio: ${name}`);
+            const body = encodeURIComponent(`${message}\n\n---\nEnviado por: ${name}\nEmail: ${email}`);
+            window.location.href = `mailto:rcarrerac01@gmail.com?subject=${subject}&body=${body}`;
+
+            btn.innerHTML = '<i class="fas fa-check"></i> Abriendo correo...';
             btn.classList.replace('from-violet-600', 'from-emerald-500');
             btn.classList.replace('to-cyan-500', 'to-teal-500');
-            form.reset();
-
+            
             setTimeout(() => {
+                form.reset();
                 btn.innerHTML = originalText;
                 btn.classList.replace('from-emerald-500', 'from-violet-600');
                 btn.classList.replace('to-teal-500', 'to-cyan-500');
             }, 3000);
-        }, 1500);
+        }, 800);
     });
 });
