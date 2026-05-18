@@ -222,22 +222,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
         btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Enviando...';
 
-        fetch("https://formsubmit.co/ajax/rcarrerac01@gmail.com", {
-            method: "POST",
-            headers: { 
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                Nombre: name,
-                Email: email,
-                Mensaje: message,
-                _subject: "Nuevo mensaje de contacto desde tu Portfolio!"
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            btn.innerHTML = '<i class="fas fa-check"></i> Enviado con éxito';
+        // Usamos un formulario nativo para evitar errores de CORS y permitir
+        // que FormSubmit muestre su página de Activación o Captcha en una pestaña nueva.
+        setTimeout(() => {
+            const tempForm = document.createElement('form');
+            tempForm.action = "https://formsubmit.co/rcarrerac01@gmail.com";
+            tempForm.method = "POST";
+            tempForm.target = "_blank"; // Abre en nueva pestaña para no romper la SPA
+
+            // Configuración adicional de FormSubmit
+            const nextInput = document.createElement('input');
+            nextInput.type = 'hidden';
+            nextInput.name = '_next';
+            nextInput.value = window.location.href; // Redirige de vuelta (opcional)
+
+            const subjectInput = document.createElement('input');
+            subjectInput.type = 'hidden';
+            subjectInput.name = '_subject';
+            subjectInput.value = "Nuevo mensaje de contacto desde tu Portfolio!";
+
+            const nameInput = document.createElement('input');
+            nameInput.type = 'hidden';
+            nameInput.name = 'Nombre';
+            nameInput.value = name;
+
+            const emailInput = document.createElement('input');
+            emailInput.type = 'hidden';
+            emailInput.name = 'Email';
+            emailInput.value = email;
+
+            const messageInput = document.createElement('input');
+            messageInput.type = 'hidden';
+            messageInput.name = 'Mensaje';
+            messageInput.value = message;
+
+            tempForm.appendChild(nextInput);
+            tempForm.appendChild(subjectInput);
+            tempForm.appendChild(nameInput);
+            tempForm.appendChild(emailInput);
+            tempForm.appendChild(messageInput);
+
+            document.body.appendChild(tempForm);
+            tempForm.submit();
+            document.body.removeChild(tempForm);
+
+            // Simulamos éxito en la interfaz visual
+            btn.innerHTML = '<i class="fas fa-check"></i> Redirigiendo...';
             btn.classList.replace('from-violet-600', 'from-emerald-500');
             btn.classList.replace('to-cyan-500', 'to-teal-500');
             
@@ -247,18 +277,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.replace('from-emerald-500', 'from-violet-600');
                 btn.classList.replace('to-teal-500', 'to-cyan-500');
             }, 3000);
-        })
-        .catch(error => {
-            console.error(error);
-            btn.innerHTML = '<i class="fas fa-times"></i> Error al enviar';
-            btn.classList.replace('from-violet-600', 'from-red-500');
-            btn.classList.replace('to-cyan-500', 'to-red-600');
-            
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.classList.replace('from-red-500', 'from-violet-600');
-                btn.classList.replace('to-red-600', 'to-cyan-500');
-            }, 3000);
-        });
+        }, 800);
     });
 });
