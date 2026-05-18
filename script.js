@@ -209,4 +209,40 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start typing
     setTimeout(type, 1000);
 
+    // 10. Form Validation & Mailto Native
+    const form = document.getElementById('contactForm');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = form.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Preparando...';
+
+            setTimeout(() => {
+                const subject = encodeURIComponent(`Nuevo contacto desde tu Portfolio: ${name}`);
+                const body = encodeURIComponent(`${message}\n\n---\nEnviado por: ${name}\nEmail: ${email}`);
+                
+                // Abre el cliente de correo nativo
+                window.location.href = `mailto:rcarrerac01@gmail.com?subject=${subject}&body=${body}`;
+
+                // Simulamos éxito en la interfaz visual
+                btn.innerHTML = '<i class="fas fa-check"></i> Abriendo correo...';
+                btn.classList.replace('from-violet-600', 'from-emerald-500');
+                btn.classList.replace('to-cyan-500', 'to-teal-500');
+                
+                setTimeout(() => {
+                    form.reset();
+                    btn.innerHTML = originalText;
+                    btn.classList.replace('from-emerald-500', 'from-violet-600');
+                    btn.classList.replace('to-teal-500', 'to-cyan-500');
+                }, 3000);
+            }, 800);
+        });
+    }
+
 });
