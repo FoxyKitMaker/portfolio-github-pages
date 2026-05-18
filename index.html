@@ -1,267 +1,692 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raúl Carrera Custodio - Desarrollador Multiplataforma</title>
-    <!-- Google Fonts -->
+    <meta name="description"
+        content="Portfolio de Raúl Carrera Custodio - Desarrollador Multiplataforma, Animación 3D y Desarrollo Web">
+    <title>Raúl Carrera Custodio | Software & UI Engineer</title>
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/src/css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="src/css/style.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        dark: {
+                            base: '#090d16',
+                            card: 'rgba(15, 23, 42, 0.4)',
+                            border: 'rgba(30, 41, 59, 0.6)'
+                        },
+                        light: {
+                            base: '#f8fafc',
+                            card: 'rgba(255, 255, 255, 0.8)',
+                            border: 'rgba(226, 232, 240, 0.5)'
+                        },
+                        accent: {
+                            cyan: '#06b6d4',
+                            violet: '#7c3aed',
+                            indigo: '#4338ca'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 
-<body>
+<body
+    class="bg-light-base dark:bg-dark-base text-slate-600 dark:text-slate-400 font-sans overflow-x-hidden antialiased selection:bg-cyan-500/30 selection:text-cyan-900 dark:selection:text-cyan-100 transition-colors duration-500 ease-in-out">
+
+    <!-- Prevención de FOUC -->
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
     <!-- Navegación -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">RC</div>
-            <ul class="nav-menu">
-                <li><a href="#inicio" class="nav-link">Inicio</a></li>
-                <li><a href="#sobre-mi" class="nav-link">Sobre mí</a></li>
-                <li><a href="#educacion" class="nav-link">Educación</a></li>
-                <li><a href="#habilidades" class="nav-link">Habilidades</a></li>
-                <li><a href="#contacto" class="nav-link">Contacto</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+    <nav class="fixed w-full z-50 top-0 transition-all duration-300 backdrop-blur-xl bg-white/70 dark:bg-dark-base/70 border-b border-slate-200/50 dark:border-slate-800/50"
+        id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <a href="#inicio"
+                    class="magnetic-btn flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 text-white font-bold text-xl shadow-lg shadow-cyan-500/20"
+                    aria-label="Ir a Inicio">
+                    RC
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <ul class="flex space-x-8 text-sm font-medium">
+                        <li><a href="#inicio"
+                                class="nav-link hover:text-indigo-600 dark:hover:text-cyan-400 transition-colors duration-300 text-slate-800 dark:text-slate-200">Inicio</a>
+                        </li>
+                        <li><a href="#sobre-mi"
+                                class="nav-link hover:text-indigo-600 dark:hover:text-cyan-400 transition-colors duration-300">Sobre
+                                mí</a></li>
+                        <li><a href="#educacion"
+                                class="nav-link hover:text-indigo-600 dark:hover:text-cyan-400 transition-colors duration-300">Educación</a>
+                        </li>
+                        <li><a href="#habilidades"
+                                class="nav-link hover:text-indigo-600 dark:hover:text-cyan-400 transition-colors duration-300">Habilidades</a>
+                        </li>
+                        <li><a href="#proyectos"
+                                class="nav-link hover:text-indigo-600 dark:hover:text-cyan-400 transition-colors duration-300">Proyectos</a>
+                        </li>
+                        <li><a href="#contacto"
+                                class="nav-link hover:text-indigo-600 dark:hover:text-cyan-400 transition-colors duration-300">Contacto</a>
+                        </li>
+                    </ul>
+
+                    <!-- Theme Toggle -->
+                    <button id="themeToggle"
+                        class="magnetic-btn p-2 rounded-full bg-slate-200/50 dark:bg-slate-800/50 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 transition-colors"
+                        aria-label="Cambiar tema">
+                        <i class="fas fa-moon text-slate-700 dark:text-yellow-400 theme-icon text-lg block"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center space-x-4">
+                    <button id="themeToggleMobile"
+                        class="p-2 rounded-full bg-slate-200/50 dark:bg-slate-800/50 transition-colors"
+                        aria-label="Cambiar tema">
+                        <i class="fas fa-moon text-slate-700 dark:text-yellow-400 theme-icon-mobile text-lg block"></i>
+                    </button>
+                    <button id="mobileMenuBtn"
+                        class="text-slate-800 dark:text-slate-200 hover:text-cyan-500 focus:outline-none p-2"
+                        aria-expanded="false" aria-label="Abrir menú">
+                        <i class="fas fa-bars text-2xl transition-transform duration-300"></i>
+                    </button>
+                </div>
             </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobileMenuPanel"
+            class="md:hidden absolute top-20 left-0 w-full bg-white/95 dark:bg-[#090d16]/95 backdrop-blur-2xl border-b border-slate-200/50 dark:border-slate-800/50 shadow-2xl origin-top scale-y-0 opacity-0 transition-all duration-300 ease-in-out">
+            <ul class="px-4 pt-2 pb-6 space-y-2">
+                <li><a href="#inicio"
+                        class="mobile-link block px-3 py-4 text-base font-medium text-slate-800 dark:text-slate-200 hover:text-cyan-500 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50">Inicio</a>
+                </li>
+                <li><a href="#sobre-mi"
+                        class="mobile-link block px-3 py-4 text-base font-medium text-slate-600 dark:text-slate-400 hover:text-cyan-500 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50">Sobre
+                        mí</a></li>
+                <li><a href="#educacion"
+                        class="mobile-link block px-3 py-4 text-base font-medium text-slate-600 dark:text-slate-400 hover:text-cyan-500 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50">Educación</a>
+                </li>
+                <li><a href="#habilidades"
+                        class="mobile-link block px-3 py-4 text-base font-medium text-slate-600 dark:text-slate-400 hover:text-cyan-500 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50">Habilidades</a>
+                </li>
+                <li><a href="#proyectos"
+                        class="mobile-link block px-3 py-4 text-base font-medium text-slate-600 dark:text-slate-400 hover:text-cyan-500 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50">Proyectos</a>
+                </li>
+                <li><a href="#contacto"
+                        class="mobile-link block px-3 py-4 text-base font-medium text-slate-600 dark:text-slate-400 hover:text-cyan-500 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50">Contacto</a>
+                </li>
+            </ul>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="inicio" class="hero">
-        <div class="hero-bg-glow"></div>
-        <div class="hero-content">
-            <img src="src/img/profile-photo.jpeg" alt="Raúl Carrera" class="hero-img">
-            <h1 class="hero-title">Raúl Carrera Custodio</h1>
-            <p class="hero-subtitle">Técnico Superior en Desarrollo de Aplicaciones Multiplataforma</p>
-            <p class="hero-description">Desarrollador creativo especializado en aplicaciones multiplataforma, animación
-                3D y desarrollo web</p>
-            <div class="hero-buttons">
-                <a href="#contacto" class="btn btn-primary">Contactarme</a>
-                <a href="#sobre-mi" class="btn btn-secondary">Más información</a>
-            </div>
-        </div>
-    </section>
+    <!-- MAIN CONTENT -->
+    <main>
+        <!-- Hero Section -->
+        <section id="inicio" class="relative min-h-screen flex items-center pt-20 overflow-hidden reveal">
+            <!-- Glow background -->
+            <div class="hero-bg-glow hidden md:block" id="heroGlow"></div>
 
-    <!-- Sobre mí -->
-    <section id="sobre-mi" class="about">
-        <div class="container">
-            <h2 class="section-title">Sobre mí</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>Soy una persona organizada, buen trabajador en equipo y creativa. Dispuesto a desplazarme y
-                        aprender nuevas tecnologías. Con formación en desarrollo multiplataforma y experiencia en diseño
-                        3D y animación.</p>
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <i class="fas fa-phone"></i>
-                            <p><strong>Teléfono:</strong> (+34) 657887740</p>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+                <div class="flex flex-col items-center text-center space-y-8">
+                    <!-- Photo -->
+                    <div class="relative reveal-child">
+                        <div
+                            class="absolute inset-0 rounded-full bg-gradient-to-tr from-violet-500 to-cyan-500 blur-md opacity-50 dark:opacity-70">
                         </div>
-                        <div class="info-item">
-                            <i class="fas fa-envelope"></i>
-                            <p><strong>Email:</strong> rcarrerac01@gmail.com</p>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <p><strong>Ubicación:</strong> Mérida, España</p>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-birthday-cake"></i>
-                            <p><strong>Nacimiento:</strong> 08/10/2003</p>
-                        </div>
+                        <img src="../src/img/profile-photo.jpeg" alt="Raúl Carrera Custodio"
+                            class="relative w-64 h-64 md:w-70 md:h-70 rounded-full object-cover border-2 border-white dark:border-slate-800 shadow-xl">
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Educación -->
-    <section id="educacion" class="education">
-        <div class="container">
-            <h2 class="section-title">Educación y Formación</h2>
-            <div class="education-timeline">
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3>Técnico Superior en Desarrollo de Aplicaciones Multiplataforma</h3>
-                        <p class="education-date">15/09/2025 – ACTUAL</p>
-                        <p class="education-school">I.E.S. Albarregas, Mérida</p>
-                        <ul class="education-skills">
-                            <li>Configurar y explotar sistemas informáticos</li>
-                            <li>Gestionar bases de datos</li>
-                            <li>Desarrollo de aplicaciones multiplataforma</li>
-                            <li>Seguridad en sistemas</li>
-                        </ul>
+                    <!-- Texts -->
+                    <div class="space-y-4 max-w-3xl reveal-child">
+                        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                            Raúl <span
+                                class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-400">Carrera
+                                Custodio</span>
+                        </h1>
+                        <p class="text-xl md:text-2xl font-medium text-slate-700 dark:text-slate-300 h-8 typing-cursor"
+                            id="typingText"></p>
+                        <p class="text-base md:text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
+                            Desarrollador creativo especializado en aplicaciones multiplataforma, animación 3D y
+                            desarrollo web, creando experiencias digitales premium.
+                        </p>
                     </div>
-                </div>
 
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3>Técnico Superior en Animación 3D, Juegos y Entornos Interactivos</h3>
-                        <p class="education-date">2022 – 2024</p>
-                        <p class="education-school">I.E.S. Extremadura, Mérida</p>
-                        <p class="grade">Calificación final: 7/10</p>
-                        <ul class="education-skills">
-                            <li>Animación 2D y 3D</li>
-                            <li>Modelado y texturización</li>
-                            <li>Postproducción</li>
-                            <li>Contenidos multimedia interactivos</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3>Técnico en Gestión Administrativa</h3>
-                        <p class="education-date">2020 – 2022</p>
-                        <p class="education-school">I.E.S. Albarregas, Mérida</p>
-                        <ul class="education-skills">
-                            <li>Gestión administrativa</li>
-                            <li>Registros contables</li>
-                            <li>Gestión de recursos humanos</li>
-                        </ul>
+                    <!-- Actions -->
+                    <div class="flex flex-col sm:flex-row gap-4 pt-6 reveal-child">
+                        <a href="#contacto"
+                            class="magnetic-btn px-8 py-4 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold hover:scale-105 transition-transform shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] dark:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.3)]">
+                            Contactarme
+                        </a>
+                        <a href="#sobre-mi"
+                            class="magnetic-btn px-8 py-4 rounded-full bg-transparent border-2 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold hover:border-slate-900 dark:hover:border-white hover:text-slate-900 dark:hover:text-white hover:scale-105 transition-all">
+                            Conocer más
+                        </a>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Habilidades -->
-    <section id="habilidades" class="skills">
-        <div class="container">
-            <h2 class="section-title">Habilidades y Competencias</h2>
-
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3>Lenguajes de Programación</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Java</span>
-                        <span class="skill-tag">JavaScript</span>
-                        <span class="skill-tag">Python</span>
-                        <span class="skill-tag">CSS</span>
-                        <span class="skill-tag">MySQL</span>
-                    </div>
-                </div>
-
-                <div class="skill-category">
-                    <h3>Software de Diseño</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Autodesk Maya</span>
-                        <span class="skill-tag">Blender</span>
-                        <span class="skill-tag">Adobe Premiere Pro</span>
-                        <span class="skill-tag">After Effects</span>
-                        <span class="skill-tag">Photoshop</span>
-                        <span class="skill-tag">Illustrator</span>
-                    </div>
-                </div>
-
-                <div class="skill-category">
-                    <h3>Herramientas Ofimáticas</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Microsoft Word</span>
-                        <span class="skill-tag">Excel</span>
-                        <span class="skill-tag">PowerPoint</span>
-                        <span class="skill-tag">Wondershare Filmora</span>
-                    </div>
-                </div>
-
-                <div class="skill-category">
-                    <h3>Idiomas</h3>
-                    <div class="language-item">
-                        <p><strong>Castellano:</strong> Nativo</p>
-                        <p><strong>Inglés:</strong> B1</p>
-                    </div>
-                </div>
+            <!-- Scroll Indicator -->
+            <div
+                class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-2 opacity-60 animate-bounce reveal-child">
+                <span class="text-sm font-medium tracking-widest uppercase">Scroll</span>
+                <i class="fas fa-chevron-down"></i>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Proyectos -->
-    <section id="proyectos" class="projects">
-        <div class="container">
-            <h2 class="section-title">Proyectos y Actividades</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-icon">
-                        <i class="fas fa-lightbulb"></i>
-                    </div>
-                    <h3>Proyecto de Emprendimiento</h3>
-                    <p class="project-date">09/2022 – 03/2023</p>
-                    <p>Participante en proyecto de emprendimiento en I.E.S. Extremadura creando un prototipo innovador.
-                    </p>
+        <!-- Sobre Mí -->
+        <section id="sobre-mi" class="py-24 relative reveal">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 reveal-child">
+                    <h2 class="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Sobre mí</h2>
+                    <div class="w-20 h-1 bg-gradient-to-r from-violet-500 to-cyan-500 mx-auto rounded-full"></div>
                 </div>
 
-                <div class="project-card">
-                    <div class="project-icon">
-                        <i class="fas fa-paint-brush"></i>
-                    </div>
-                    <h3>Cambia el Rollo</h3>
-                    <p class="project-date">01/2023</p>
-                    <p>Participante en certamen de diseño, creando cartel publicitario en I.E.S. Extremadura.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <!-- Text & Terminal -->
+                    <div class="space-y-6 reveal-child">
+                        <p class="text-lg leading-relaxed">
+                            Soy una persona organizada, excelente trabajador en equipo y altamente creativa. Dispuesto a
+                            desplazarme geográficamente y con un alto compromiso para aprender nuevas tecnologías.
+                        </p>
+                        <p class="text-lg leading-relaxed">
+                            Mi perfil fusiona una formación especializada en el desarrollo multiplataforma combinada con
+                            una sólida experiencia en diseño 3D y animación, permitiéndome abordar proyectos desde una
+                            perspectiva técnica y estética integral.
+                        </p>
 
-    <!-- Contacto -->
-    <section id="contacto" class="contact">
-        <div class="container">
-            <h2 class="section-title">Contacto</h2>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <i class="fas fa-phone"></i>
-                        <div>
-                            <h4>Teléfono</h4>
-                            <p><a href="tel:+34657887740">(+34) 657887740</a></p>
+                        <!-- Terminal decorativa -->
+                        <div class="mt-8 rounded-lg overflow-hidden glass-card font-mono text-sm shadow-xl tilt-card">
+                            <div
+                                class="bg-slate-200 dark:bg-slate-800/80 px-4 py-2 flex space-x-2 items-center border-b border-slate-300/50 dark:border-slate-700/50">
+                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                <span class="ml-4 text-xs text-slate-500 dark:text-slate-400">~/raul/profile.sh</span>
+                            </div>
+                            <div class="p-4 text-slate-700 dark:text-cyan-400">
+                                <p><span class="text-indigo-600 dark:text-violet-400">$</span> whoami</p>
+                                <p class="text-slate-500 dark:text-slate-400 ml-4">> Raúl Carrera Custodio</p>
+                                <p class="mt-2"><span class="text-indigo-600 dark:text-violet-400">$</span> cat
+                                    skills.txt | grep "passion"</p>
+                                <p class="text-slate-500 dark:text-slate-400 ml-4">> "Crear interfaces que maravillen e
+                                    interactúen fluídamente con el usuario."</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        <div>
-                            <h4>Email</h4>
-                            <p><a href="mailto:rcarrerac01@gmail.com">rcarrerac01@gmail.com</a></p>
+
+                    <!-- Info Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 reveal-child">
+                        <div class="glass-card p-6 rounded-2xl flex flex-col items-start gap-4 tilt-card group">
+                            <div
+                                class="w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-calendar-alt text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm uppercase tracking-wider font-semibold text-slate-500">Nacimiento
+                                </h3>
+                                <p class="text-slate-900 dark:text-white font-medium mt-1">08 Octubre 2003</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <div>
-                            <h4>Ubicación</h4>
-                            <p>06800, Mérida, España</p>
+                        <div class="glass-card p-6 rounded-2xl flex flex-col items-start gap-4 tilt-card group">
+                            <div
+                                class="w-12 h-12 rounded-full bg-cyan-100 dark:bg-cyan-500/10 flex items-center justify-center text-cyan-600 dark:text-cyan-400 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-map-marker-alt text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm uppercase tracking-wider font-semibold text-slate-500">Ubicación</h3>
+                                <p class="text-slate-900 dark:text-white font-medium mt-1">Mérida, España</p>
+                                <p class="text-xs text-slate-500">06800</p>
+                            </div>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl flex flex-col items-start gap-4 tilt-card group">
+                            <div
+                                class="w-12 h-12 rounded-full bg-violet-100 dark:bg-violet-500/10 flex items-center justify-center text-violet-600 dark:text-violet-400 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-envelope text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm uppercase tracking-wider font-semibold text-slate-500">Email</h3>
+                                <a href="mailto:rcarrerac01@gmail.com"
+                                    class="text-slate-900 dark:text-white font-medium mt-1 hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">rcarrerac01@gmail.com</a>
+                            </div>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl flex flex-col items-start gap-4 tilt-card group">
+                            <div
+                                class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-phone text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm uppercase tracking-wider font-semibold text-slate-500">Teléfono</h3>
+                                <p class="text-slate-900 dark:text-white font-medium mt-1">(+34) 657887740</p>
+                                <p class="text-xs text-slate-500">Fijo: (+34) 924374349</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <form class="contact-form" id="contactForm">
-                    <input type="text" placeholder="Tu nombre" required>
-                    <input type="email" placeholder="Tu email" required>
-                    <textarea placeholder="Tu mensaje" rows="5" required></textarea>
-                    <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
-                </form>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- Educación y Formación -->
+        <section id="educacion"
+            class="py-24 relative bg-slate-50 dark:bg-[#0b0f19] border-y border-slate-200/50 dark:border-slate-800/50 reveal">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 reveal-child">
+                    <h2 class="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Educación</h2>
+                    <div class="w-20 h-1 bg-gradient-to-r from-violet-500 to-cyan-500 mx-auto rounded-full"></div>
+                </div>
+
+                <div
+                    class="relative border-l-2 border-indigo-200 dark:border-indigo-900/50 ml-4 md:ml-0 md:pl-0 space-y-12">
+
+                    <!-- Item 1 -->
+                    <div class="relative pl-8 md:pl-0 md:flex items-start group reveal-child">
+                        <div
+                            class="absolute left-[-9px] md:left-[50%] md:-translate-x-1/2 top-1 w-4 h-4 rounded-full bg-white dark:bg-dark-base border-4 border-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.6)] z-10 group-hover:scale-125 transition-transform duration-300">
+                        </div>
+
+                        <div class="md:w-1/2 md:pr-12 md:text-right mb-4 md:mb-0">
+                            <span
+                                class="inline-block px-3 py-1 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-400 rounded-full text-sm font-semibold tracking-wide mb-2">15/09/2025
+                                – ACTUAL</span>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Técnico Superior en Desarrollo
+                                de Aplicaciones Multiplataforma</h3>
+                            <p class="text-indigo-600 dark:text-indigo-400 font-medium">I.E.S. Albarregas (Mérida)</p>
+                        </div>
+
+                        <div class="md:w-1/2 md:pl-12">
+                            <div class="glass-card p-6 rounded-2xl tilt-card">
+                                <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                                    <li class="flex items-start"><i
+                                            class="fas fa-check text-cyan-500 mt-1 mr-2 flex-shrink-0"></i> Configurar y
+                                        explotar sistemas informáticos.</li>
+                                    <li class="flex items-start"><i
+                                            class="fas fa-check text-cyan-500 mt-1 mr-2 flex-shrink-0"></i> Aplicar
+                                        técnicas avanzadas de seguridad en sistemas y aplicaciones.</li>
+                                    <li class="flex items-start"><i
+                                            class="fas fa-check text-cyan-500 mt-1 mr-2 flex-shrink-0"></i> Gestionar
+                                        bases de datos y verificar su integridad.</li>
+                                    <li class="flex items-start"><i
+                                            class="fas fa-check text-cyan-500 mt-1 mr-2 flex-shrink-0"></i> Desarrollar
+                                        aplicaciones multiplataforma completas.</li>
+                                </ul>
+                                <div class="mt-4 flex flex-wrap gap-2">
+                                    <span
+                                        class="text-xs px-2 py-1 bg-slate-200 dark:bg-slate-800 rounded text-slate-700 dark:text-slate-300">Java</span>
+                                    <span
+                                        class="text-xs px-2 py-1 bg-slate-200 dark:bg-slate-800 rounded text-slate-700 dark:text-slate-300">MySQL</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="relative pl-8 md:pl-0 md:flex flex-row-reverse items-start group reveal-child">
+                        <div
+                            class="absolute left-[-9px] md:left-[50%] md:-translate-x-1/2 top-1 w-4 h-4 rounded-full bg-white dark:bg-dark-base border-4 border-violet-500 shadow-[0_0_15px_rgba(124,58,237,0.6)] z-10 group-hover:scale-125 transition-transform duration-300">
+                        </div>
+
+                        <div class="md:w-1/2 md:pl-12 mb-4 md:mb-0">
+                            <span
+                                class="inline-block px-3 py-1 bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-400 rounded-full text-sm font-semibold tracking-wide mb-2">2022
+                                – 2024</span>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Técnico Superior en Animación
+                                3D, Juegos y Entornos Interactivos</h3>
+                            <p class="text-indigo-600 dark:text-indigo-400 font-medium">I.E.S. Extremadura (Mérida)</p>
+                            <p class="text-sm font-bold text-slate-500 mt-1">Calificación Final: 7</p>
+                        </div>
+
+                        <div class="md:w-1/2 md:pr-12">
+                            <div class="glass-card p-6 rounded-2xl tilt-card">
+                                <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                                    <li class="flex items-start"><i
+                                            class="fas fa-check text-violet-500 mt-1 mr-2 flex-shrink-0"></i>
+                                        Conceptualizar proyectos de animación y control de storyboard.</li>
+                                    <li class="flex items-start"><i
+                                            class="fas fa-check text-violet-500 mt-1 mr-2 flex-shrink-0"></i> Producción
+                                        2D y 3D completa (modelado, textura, luz, render).</li>
+                                    <li class="flex items-start"><i
+                                            class="fas fa-check text-violet-500 mt-1 mr-2 flex-shrink-0"></i>
+                                        Postproducción y contenidos multimedia interactivos.</li>
+                                </ul>
+                                <div class="mt-4 flex flex-wrap gap-2">
+                                    <span
+                                        class="text-xs px-2 py-1 bg-slate-200 dark:bg-slate-800 rounded text-slate-700 dark:text-slate-300">Maya</span>
+                                    <span
+                                        class="text-xs px-2 py-1 bg-slate-200 dark:bg-slate-800 rounded text-slate-700 dark:text-slate-300">Blender</span>
+                                    <span
+                                        class="text-xs px-2 py-1 bg-slate-200 dark:bg-slate-800 rounded text-slate-700 dark:text-slate-300">After
+                                        Effects</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="relative pl-8 md:pl-0 md:flex items-start group reveal-child">
+                        <div
+                            class="absolute left-[-9px] md:left-[50%] md:-translate-x-1/2 top-1 w-4 h-4 rounded-full bg-white dark:bg-dark-base border-4 border-slate-400 group-hover:scale-125 transition-transform duration-300">
+                        </div>
+
+                        <div class="md:w-1/2 md:pr-12 md:text-right mb-4 md:mb-0">
+                            <span
+                                class="inline-block px-3 py-1 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-sm font-semibold tracking-wide mb-2">2020
+                                – 2022</span>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Técnico en Gestión
+                                Administrativa</h3>
+                            <p class="text-indigo-600 dark:text-indigo-400 font-medium">I.E.S. Albarregas (Mérida)</p>
+                        </div>
+
+                        <div class="md:w-1/2 md:pl-12">
+                            <div class="glass-card p-6 rounded-2xl tilt-card">
+                                <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                                    <li class="flex items-start"><i
+                                            class="fas fa-check text-slate-400 mt-1 mr-2 flex-shrink-0"></i> Registrar y
+                                        archivar comunicaciones y documentos.</li>
+                                    <li class="flex items-start"><i
+                                            class="fas fa-check text-slate-400 mt-1 mr-2 flex-shrink-0"></i> Registrar
+                                        contablemente documentación bajo condiciones de seguridad.</li>
+                                    <li class="flex items-start"><i
+                                            class="fas fa-check text-slate-400 mt-1 mr-2 flex-shrink-0"></i> Apoyo
+                                        administrativo laboral, fiscal y atención al cliente.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Línea vertical decorativa desktop -->
+                    <div
+                        class="hidden md:block absolute top-0 bottom-0 left-[50%] w-[2px] bg-indigo-200 dark:bg-indigo-900/50 -translate-x-1/2 z-0">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Habilidades -->
+        <section id="habilidades" class="py-24 relative reveal">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 reveal-child">
+                    <h2 class="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Habilidades Técnicas
+                    </h2>
+                    <div class="w-20 h-1 bg-gradient-to-r from-violet-500 to-cyan-500 mx-auto rounded-full"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                    <!-- Programación -->
+                    <div class="glass-card p-8 rounded-2xl reveal-child tilt-card">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-white shadow-lg">
+                                <i class="fas fa-code text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Desarrollo & Programación</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <span
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800/80 hover:bg-cyan-100 dark:hover:bg-cyan-900/50 hover:text-cyan-700 dark:hover:text-cyan-300 rounded-lg text-sm font-medium transition-colors cursor-default border border-transparent hover:border-cyan-200 dark:hover:border-cyan-800">Java</span>
+                            <span
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800/80 hover:bg-cyan-100 dark:hover:bg-cyan-900/50 hover:text-cyan-700 dark:hover:text-cyan-300 rounded-lg text-sm font-medium transition-colors cursor-default border border-transparent hover:border-cyan-200 dark:hover:border-cyan-800">JavaScript</span>
+                            <span
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800/80 hover:bg-cyan-100 dark:hover:bg-cyan-900/50 hover:text-cyan-700 dark:hover:text-cyan-300 rounded-lg text-sm font-medium transition-colors cursor-default border border-transparent hover:border-cyan-200 dark:hover:border-cyan-800">Python</span>
+                            <span
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800/80 hover:bg-cyan-100 dark:hover:bg-cyan-900/50 hover:text-cyan-700 dark:hover:text-cyan-300 rounded-lg text-sm font-medium transition-colors cursor-default border border-transparent hover:border-cyan-200 dark:hover:border-cyan-800">CSS</span>
+                            <span
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800/80 hover:bg-cyan-100 dark:hover:bg-cyan-900/50 hover:text-cyan-700 dark:hover:text-cyan-300 rounded-lg text-sm font-medium transition-colors cursor-default border border-transparent hover:border-cyan-200 dark:hover:border-cyan-800">MySQL</span>
+                        </div>
+                    </div>
+
+                    <!-- Diseño 3D -->
+                    <div class="glass-card p-8 rounded-2xl reveal-child tilt-card">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white shadow-lg">
+                                <i class="fas fa-cube text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Diseño 3D & Animación</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <span
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800/80 hover:bg-violet-100 dark:hover:bg-violet-900/50 hover:text-violet-700 dark:hover:text-violet-300 rounded-lg text-sm font-medium transition-colors cursor-default border border-transparent hover:border-violet-200 dark:hover:border-violet-800">Autodesk
+                                Maya (Intermedio)</span>
+                            <span
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800/80 hover:bg-violet-100 dark:hover:bg-violet-900/50 hover:text-violet-700 dark:hover:text-violet-300 rounded-lg text-sm font-medium transition-colors cursor-default border border-transparent hover:border-violet-200 dark:hover:border-violet-800">Blender</span>
+                            <span
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800/80 hover:bg-violet-100 dark:hover:bg-violet-900/50 hover:text-violet-700 dark:hover:text-violet-300 rounded-lg text-sm font-medium transition-colors cursor-default border border-transparent hover:border-violet-200 dark:hover:border-violet-800">Adobe
+                                Premiere Pro</span>
+                            <span
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800/80 hover:bg-violet-100 dark:hover:bg-violet-900/50 hover:text-violet-700 dark:hover:text-violet-300 rounded-lg text-sm font-medium transition-colors cursor-default border border-transparent hover:border-violet-200 dark:hover:border-violet-800">After
+                                Effects</span>
+                            <span
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800/80 hover:bg-violet-100 dark:hover:bg-violet-900/50 hover:text-violet-700 dark:hover:text-violet-300 rounded-lg text-sm font-medium transition-colors cursor-default border border-transparent hover:border-violet-200 dark:hover:border-violet-800">Illustrator</span>
+                            <span
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800/80 hover:bg-violet-100 dark:hover:bg-violet-900/50 hover:text-violet-700 dark:hover:text-violet-300 rounded-lg text-sm font-medium transition-colors cursor-default border border-transparent hover:border-violet-200 dark:hover:border-violet-800">Photoshop</span>
+                        </div>
+                    </div>
+
+                    <!-- Ofimática -->
+                    <div class="glass-card p-8 rounded-2xl reveal-child tilt-card">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white shadow-lg">
+                                <i class="fas fa-laptop-code text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Ofimática & Multimedia</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <span
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800/80 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 hover:text-emerald-700 dark:hover:text-emerald-300 rounded-lg text-sm font-medium transition-colors cursor-default border border-transparent hover:border-emerald-200 dark:hover:border-emerald-800">Microsoft
+                                Word</span>
+                            <span
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800/80 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 hover:text-emerald-700 dark:hover:text-emerald-300 rounded-lg text-sm font-medium transition-colors cursor-default border border-transparent hover:border-emerald-200 dark:hover:border-emerald-800">Excel</span>
+                            <span
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800/80 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 hover:text-emerald-700 dark:hover:text-emerald-300 rounded-lg text-sm font-medium transition-colors cursor-default border border-transparent hover:border-emerald-200 dark:hover:border-emerald-800">PowerPoint</span>
+                            <span
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800/80 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 hover:text-emerald-700 dark:hover:text-emerald-300 rounded-lg text-sm font-medium transition-colors cursor-default border border-transparent hover:border-emerald-200 dark:hover:border-emerald-800">Wondershare
+                                Filmora</span>
+                        </div>
+                    </div>
+
+                    <!-- Idiomas -->
+                    <div class="glass-card p-8 rounded-2xl reveal-child tilt-card">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white shadow-lg">
+                                <i class="fas fa-language text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Idiomas</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="font-medium text-slate-700 dark:text-slate-300">Castellano
+                                        (Nativo)</span>
+                                    <span class="text-indigo-500">100%</span>
+                                </div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                                    <div class="bg-indigo-500 h-2 rounded-full" style="width: 100%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="font-medium text-slate-700 dark:text-slate-300">Inglés (B1)</span>
+                                    <span class="text-indigo-500">B1</span>
+                                </div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                                    <div class="bg-indigo-500 h-2 rounded-full" style="width: 60%"></div>
+                                </div>
+                                <p class="text-xs text-slate-500 mt-2">Comprensión y producción oral/escrita nivel B1
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Proyectos -->
+        <section id="proyectos"
+            class="py-24 relative bg-slate-50 dark:bg-[#0b0f19] border-y border-slate-200/50 dark:border-slate-800/50 reveal">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 reveal-child">
+                    <h2 class="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Proyectos</h2>
+                    <div class="w-20 h-1 bg-gradient-to-r from-violet-500 to-cyan-500 mx-auto rounded-full"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Proyecto 1 -->
+                    <div class="glass-card rounded-2xl overflow-hidden reveal-child tilt-card group">
+                        <div class="h-48 overflow-hidden relative">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-cyan-500/20 z-10 group-hover:opacity-0 transition-opacity duration-300">
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop"
+                                alt="Emprendimiento"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        </div>
+                        <div class="p-6">
+                            <span
+                                class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-cyan-400">09/2022
+                                – 03/2023</span>
+                            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-2 mb-3">Proyecto de
+                                Emprendimiento</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-4 text-sm leading-relaxed">
+                                Participante activo en un proyecto de emprendimiento innovador enfocado en la
+                                conceptualización, diseño y creación del prototipo funcional de un proyecto (I.E.S.
+                                Extremadura).
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Proyecto 2 -->
+                    <div class="glass-card rounded-2xl overflow-hidden reveal-child tilt-card group">
+                        <div class="h-48 overflow-hidden relative">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 z-10 group-hover:opacity-0 transition-opacity duration-300">
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=800&auto=format&fit=crop"
+                                alt="Diseño Publicitario"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        </div>
+                        <div class="p-6">
+                            <span
+                                class="text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-fuchsia-400">Enero
+                                2023</span>
+                            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-2 mb-3">Certamen "Cambia el
+                                Rollo"</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-4 text-sm leading-relaxed">
+                                Participante en el certamen de diseño y publicidad, enfocado en la composición creativa
+                                y desarrollo final de un cartel publicitario institucional.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contacto -->
+        <section id="contacto" class="py-24 relative reveal">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 reveal-child">
+                    <h2 class="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Empecemos a trabajar
+                    </h2>
+                    <p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">¿Tienes un proyecto en
+                        mente? Escríbeme y hagamos que suceda.</p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-8 md:p-12 shadow-2xl reveal-child">
+                    <form id="contactForm" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="relative">
+                                <input type="text" id="name" required placeholder=" "
+                                    class="floating-input w-full bg-transparent border-b-2 border-slate-300 dark:border-slate-700 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition-colors peer">
+                                <label for="name"
+                                    class="floating-label absolute left-0 top-3 text-slate-500 cursor-text peer-focus:text-cyan-500 transition-all duration-300">Nombre
+                                    completo</label>
+                            </div>
+                            <div class="relative">
+                                <input type="email" id="email" required placeholder=" "
+                                    class="floating-input w-full bg-transparent border-b-2 border-slate-300 dark:border-slate-700 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition-colors peer">
+                                <label for="email"
+                                    class="floating-label absolute left-0 top-3 text-slate-500 cursor-text peer-focus:text-cyan-500 transition-all duration-300">Correo
+                                    electrónico</label>
+                            </div>
+                        </div>
+                        <div class="relative pt-4">
+                            <textarea id="message" required rows="4" placeholder=" "
+                                class="floating-input w-full bg-transparent border-b-2 border-slate-300 dark:border-slate-700 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition-colors peer resize-none"></textarea>
+                            <label for="message"
+                                class="floating-label absolute left-0 top-7 text-slate-500 cursor-text peer-focus:text-cyan-500 transition-all duration-300">Mensaje</label>
+                        </div>
+                        <button type="submit"
+                            class="magnetic-btn w-full py-4 rounded-xl bg-gradient-to-r from-violet-600 to-cyan-500 text-white font-bold text-lg hover:shadow-[0_0_30px_rgba(6,182,212,0.5)] transition-shadow">
+                            Enviar Mensaje <i class="fas fa-paper-plane ml-2"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <p>&copy; 2026 Raúl Carrera Custodio. Todos los derechos reservados.</p>
-            <div class="social-links">
-                <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+    <footer class="bg-white dark:bg-[#060910] border-t border-slate-200 dark:border-slate-800 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0 text-center md:text-left">
+                <span
+                    class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-cyan-500">RC.</span>
+                <p class="text-slate-500 text-sm mt-2">&copy; 2026 Raúl Carrera Custodio. Todos los derechos reservados.
+                </p>
+            </div>
+
+            <div class="flex space-x-6">
+                <a href="#" class="text-slate-400 hover:text-cyan-500 transition-colors" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin text-2xl"></i>
+                </a>
+                <a href="#" class="text-slate-400 hover:text-cyan-500 transition-colors" aria-label="GitHub">
+                    <i class="fab fa-github text-2xl"></i>
+                </a>
+                <a href="#" class="text-slate-400 hover:text-cyan-500 transition-colors" aria-label="Twitter">
+                    <i class="fab fa-twitter text-2xl"></i>
+                </a>
             </div>
         </div>
     </footer>
 
+    <!-- JS Logic -->
     <script src="script.js"></script>
 </body>
 

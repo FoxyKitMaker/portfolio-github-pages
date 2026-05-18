@@ -1,104 +1,247 @@
-// Menú hamburguesa
-const hamburger = document.querySelector('.hamburger');
-const navMenu = document.querySelector('.nav-menu');
-const navLinks = document.querySelectorAll('.nav-link');
+document.addEventListener('DOMContentLoaded', () => {
 
-hamburger.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
-});
+    // 1. Theme Toggle Logic
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const themeToggleMobile = document.getElementById('themeToggleMobile');
+    const icons = document.querySelectorAll('.theme-icon, .theme-icon-mobile');
 
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
-    });
-});
-
-// Hero Glow Mouse Tracking
-const hero = document.querySelector('.hero');
-const glow = document.querySelector('.hero-bg-glow');
-if (hero && glow) {
-    hero.addEventListener('mousemove', (e) => {
-        const rect = hero.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        glow.style.left = `${x}px`;
-        glow.style.top = `${y}px`;
-    });
-}
-
-// Cerrar menú al hacer clic fuera
-document.addEventListener('click', (e) => {
-    if (!e.target.closest('.nav-container')) {
-        navMenu.classList.remove('active');
+    function updateIcon(isDark) {
+        icons.forEach(icon => {
+            icon.style.transform = 'rotate(360deg) scale(0)';
+            setTimeout(() => {
+                if (isDark) {
+                    icon.classList.remove('fa-moon', 'text-slate-700');
+                    icon.classList.add('fa-sun', 'text-yellow-400');
+                } else {
+                    icon.classList.remove('fa-sun', 'text-yellow-400');
+                    icon.classList.add('fa-moon', 'text-slate-700');
+                }
+                icon.style.transform = 'rotate(0deg) scale(1)';
+            }, 250);
+        });
     }
-});
 
-// Formulario de contacto
-const contactForm = document.getElementById('contactForm');
-if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert('Gracias por tu mensaje. Me pondré en contacto contigo pronto.');
-        contactForm.reset();
+    // Init icon state
+    updateIcon(document.documentElement.classList.contains('dark'));
+
+    function toggleTheme() {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        updateIcon(isDark);
+    }
+
+    themeToggleBtn.addEventListener('click', toggleTheme);
+    themeToggleMobile.addEventListener('click', toggleTheme);
+
+
+    // 2. Mobile Menu
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobilePanel = document.getElementById('mobileMenuPanel');
+    const mobileIcon = mobileBtn.querySelector('i');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+    let menuOpen = false;
+
+    function toggleMenu() {
+        menuOpen = !menuOpen;
+        mobileBtn.setAttribute('aria-expanded', menuOpen);
+        if (menuOpen) {
+            mobileIcon.classList.replace('fa-bars', 'fa-times');
+            mobilePanel.classList.remove('scale-y-0', 'opacity-0');
+            mobilePanel.classList.add('scale-y-100', 'opacity-100');
+        } else {
+            mobileIcon.classList.replace('fa-times', 'fa-bars');
+            mobilePanel.classList.remove('scale-y-100', 'opacity-100');
+            mobilePanel.classList.add('scale-y-0', 'opacity-0');
+        }
+    }
+
+    mobileBtn.addEventListener('click', toggleMenu);
+
+    // Cerrar menú al clickear link
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', () => { if (menuOpen) toggleMenu(); });
     });
-}
+    // Cerrar menú al clickear fuera
+    document.addEventListener('click', (e) => {
+        if (menuOpen && !mobilePanel.contains(e.target) && !mobileBtn.contains(e.target)) toggleMenu();
+    });
 
-// Efecto de scroll suave para enlaces
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        const href = this.getAttribute('href');
-        if (href !== '#') {
-            e.preventDefault();
-            const target = document.querySelector(href);
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth' });
+
+    // 3. Scroll Progress Bar
+    const progressBar = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height);
+        progressBar.style.transform = `scaleX(${scrolled})`;
+    });
+
+
+    // 4. Navbar Background on Scroll & Scroll Spy
+    const navbar = document.getElementById('navbar');
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+        // Navbar shadow/blur
+        if (window.scrollY > 20) {
+            navbar.classList.add('shadow-md');
+        } else {
+            navbar.classList.remove('shadow-md');
+        }
+
+        // Scroll Spy
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (scrollY >= (sectionTop - sectionHeight / 3)) {
+                current = section.getAttribute('id');
             }
-        }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('text-indigo-600', 'dark:text-cyan-400');
+            if (link.getAttribute('href').includes(current)) {
+                link.classList.add('text-indigo-600', 'dark:text-cyan-400');
+            }
+        });
     });
-});
 
-// Animación de entrada para elementos
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -100px 0px'
-};
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.animation = 'fadeInUp 0.6s ease-out forwards';
-            observer.unobserve(entry.target);
-        }
+    // 5. 3D Tilt Effect
+    const tiltElements = document.querySelectorAll('.tilt-card');
+    tiltElements.forEach(el => {
+        el.addEventListener('mousemove', (e) => {
+            const rect = el.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = ((y - centerY) / centerY) * -10; // Max 10 deg
+            const rotateY = ((x - centerX) / centerX) * 10;
+
+            el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
+        });
+        el.addEventListener('mouseleave', () => {
+            el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
+        });
     });
-}, observerOptions);
 
-document.querySelectorAll('.info-item, .timeline-content, .skill-category, .project-card').forEach(el => {
-    el.style.opacity = '0';
-    observer.observe(el);
-});
 
-// Efecto navbar en scroll
-let lastScrollTop = 0;
-const navbar = document.querySelector('.navbar');
+    // 6. Magnetic Effect
+    const magneticBtns = document.querySelectorAll('.magnetic-btn');
+    magneticBtns.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            // Move 30% of delta
+            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        });
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = '';
+        });
+    });
 
-window.addEventListener('scroll', () => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
-    if (scrollTop > 100) {
-        navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
-        navbar.style.background = 'rgba(3, 7, 18, 0.95)';
-        navbar.style.padding = '0.5rem 0';
-    } else {
-        navbar.style.boxShadow = 'none';
-        navbar.style.background = 'rgba(3, 7, 18, 0.8)';
-        navbar.style.padding = '1rem 0';
+
+    // 7. Hero Glow Mouse Tracking
+    const hero = document.getElementById('inicio');
+    const glow = document.getElementById('heroGlow');
+    if (hero && glow) {
+        hero.addEventListener('mousemove', (e) => {
+            const rect = hero.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            glow.style.left = `${x}px`;
+            glow.style.top = `${y}px`;
+        });
+        hero.addEventListener('mouseleave', () => {
+            glow.style.left = '50%';
+            glow.style.top = '50%';
+        });
     }
-    
-    lastScrollTop = scrollTop;
 
-    const heroContent = document.querySelector('.hero-content');
-    if (heroContent && scrollTop < 800) {
-        heroContent.style.transform = `translateY(${scrollTop * 0.3}px)`;
-        heroContent.style.opacity = 1 - (scrollTop / 600);
+
+    // 8. Apple Reveal (Scroll Staggered)
+    const observerOptions = { threshold: 0.15, rootMargin: '0px' };
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+
+                // Stagger children
+                const children = entry.target.querySelectorAll('.reveal-child');
+                children.forEach((child, index) => {
+                    setTimeout(() => {
+                        child.classList.add('active');
+                    }, index * 150);
+                });
+
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+
+    // 9. Intelligent Typing Effect
+    const roles = ["Desarrollador Multiplataforma", "Animador 3D", "UI/UX Enthusiast", "Frontend Developer"];
+    let roleIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    const typingElement = document.getElementById('typingText');
+
+    function type() {
+        const currentRole = roles[roleIndex];
+
+        if (isDeleting) {
+            typingElement.textContent = currentRole.substring(0, charIndex - 1);
+            charIndex--;
+        } else {
+            typingElement.textContent = currentRole.substring(0, charIndex + 1);
+            charIndex++;
+        }
+
+        let typeSpeed = isDeleting ? 40 : 80;
+
+        if (!isDeleting && charIndex === currentRole.length) {
+            typeSpeed = 2000; // Pause at end
+            isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            roleIndex = (roleIndex + 1) % roles.length;
+            typeSpeed = 500; // Pause before new word
+        }
+
+        setTimeout(type, typeSpeed);
     }
+
+    // Start typing
+    setTimeout(type, 1000);
+
+    // 10. Form Validation
+    const form = document.getElementById('contactForm');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('button[type="submit"]');
+        const originalText = btn.innerHTML;
+
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Enviando...';
+
+        setTimeout(() => {
+            btn.innerHTML = '<i class="fas fa-check"></i> Enviado con éxito';
+            btn.classList.replace('from-violet-600', 'from-emerald-500');
+            btn.classList.replace('to-cyan-500', 'to-teal-500');
+            form.reset();
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.replace('from-emerald-500', 'from-violet-600');
+                btn.classList.replace('to-teal-500', 'to-cyan-500');
+            }, 3000);
+        }, 1500);
+    });
 });
