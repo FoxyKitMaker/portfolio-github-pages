@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&family=Outfit:wght@400;600;800;900&display=swap"
         rel="stylesheet">
 
     <!-- Icons -->
@@ -29,6 +29,7 @@
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         mono: ['Fira Code', 'monospace'],
+                        display: ['Outfit', 'sans-serif'],
                     },
                     colors: {
                         dark: {
@@ -73,12 +74,6 @@
         id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-                <!-- Logo -->
-                <a href="#inicio"
-                    class="magnetic-btn flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 text-white font-bold text-xl shadow-lg shadow-cyan-500/20"
-                    aria-label="Ir a Inicio">
-                    RC
-                </a>
 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-8">
@@ -156,26 +151,28 @@
     <!-- MAIN CONTENT -->
     <main>
         <!-- Hero Section -->
-        <section id="inicio" class="relative min-h-screen flex items-center pt-20 overflow-hidden reveal">
+        <section id="inicio"
+            class="relative min-h-[100svh] flex flex-col justify-center items-center pt-32 pb-24 overflow-hidden reveal">
             <!-- Glow background -->
             <div class="hero-bg-glow hidden md:block" id="heroGlow"></div>
 
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
                 <div class="flex flex-col items-center text-center space-y-8">
                     <!-- Photo -->
-                    <div class="relative reveal-child">
+                    <div class="relative reveal-child animate-float-slow">
                         <div
-                            class="absolute inset-0 rounded-full bg-gradient-to-tr from-violet-500 to-cyan-500 blur-md opacity-50 dark:opacity-70">
+                            class="absolute inset-0 rounded-full bg-gradient-to-tr from-violet-500 to-cyan-500 blur-md opacity-60 dark:opacity-80 animate-pulse-glow">
                         </div>
                         <img src="../src/img/profile-photo.jpeg" alt="Raúl Carrera Custodio"
-                            class="relative w-64 h-64 md:w-70 md:h-70 rounded-full object-cover border-2 border-white dark:border-slate-800 shadow-xl">
+                            class="relative w-56 h-56 md:w-64 md:h-64 rounded-full object-cover border-4 border-white dark:border-slate-800 shadow-2xl">
                     </div>
 
                     <!-- Texts -->
                     <div class="space-y-4 max-w-3xl reveal-child">
-                        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                        <h1
+                            class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white font-display">
                             Raúl <span
-                                class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-400">Carrera
+                                class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-400 bg-[length:200%_auto] animate-gradient-x">Carrera
                                 Custodio</span>
                         </h1>
                         <p class="text-xl md:text-2xl font-medium text-slate-700 dark:text-slate-300 h-8 typing-cursor"
@@ -199,20 +196,14 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Scroll Indicator -->
-            <div
-                class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-2 opacity-60 animate-bounce reveal-child">
-                <span class="text-sm font-medium tracking-widest uppercase">Scroll</span>
-                <i class="fas fa-chevron-down"></i>
-            </div>
         </section>
 
         <!-- Sobre Mí -->
         <section id="sobre-mi" class="py-24 relative reveal">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16 reveal-child">
-                    <h2 class="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Sobre mí</h2>
+                    <h2 class="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4 font-display">Sobre mí
+                    </h2>
                     <div class="w-20 h-1 bg-gradient-to-r from-violet-500 to-cyan-500 mx-auto rounded-full"></div>
                 </div>
 
@@ -305,7 +296,8 @@
             class="py-24 relative bg-slate-50 dark:bg-[#0b0f19] border-y border-slate-200/50 dark:border-slate-800/50 reveal">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16 reveal-child">
-                    <h2 class="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Educación</h2>
+                    <h2 class="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4 font-display">
+                        Educación</h2>
                     <div class="w-20 h-1 bg-gradient-to-r from-violet-500 to-cyan-500 mx-auto rounded-full"></div>
                 </div>
 
@@ -439,7 +431,8 @@
         <section id="habilidades" class="py-24 relative reveal">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16 reveal-child">
-                    <h2 class="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Habilidades Técnicas
+                    <h2 class="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4 font-display">
+                        Habilidades Técnicas
                     </h2>
                     <div class="w-20 h-1 bg-gradient-to-r from-violet-500 to-cyan-500 mx-auto rounded-full"></div>
                 </div>
@@ -563,7 +556,8 @@
             class="py-24 relative bg-slate-50 dark:bg-[#0b0f19] border-y border-slate-200/50 dark:border-slate-800/50 reveal">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16 reveal-child">
-                    <h2 class="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Proyectos</h2>
+                    <h2 class="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4 font-display">
+                        Proyectos</h2>
                     <div class="w-20 h-1 bg-gradient-to-r from-violet-500 to-cyan-500 mx-auto rounded-full"></div>
                 </div>
 
@@ -598,8 +592,7 @@
                             <div
                                 class="absolute inset-0 bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 z-10 group-hover:opacity-0 transition-opacity duration-300">
                             </div>
-                            <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=800&auto=format&fit=crop"
-                                alt="Diseño Publicitario"
+                            <img src="src/img/Cambia_el_rollo_3_logo.jpg" alt="Diseño Publicitario"
                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         </div>
                         <div class="p-6">
@@ -622,7 +615,8 @@
         <section id="contacto" class="py-24 relative reveal">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16 reveal-child">
-                    <h2 class="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Empecemos a trabajar
+                    <h2 class="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4 font-display">
+                        Empecemos a trabajar
                     </h2>
                     <p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">¿Tienes un proyecto en
                         mente? Escríbeme y hagamos que suceda.</p>
