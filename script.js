@@ -222,18 +222,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
         btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Enviando...';
 
-        // Usamos mailto: nativo porque el servicio externo (FormSubmit)
-        // parece estar bloqueado o caído (DNS_PROBE_FINISHED_NXDOMAIN).
-        // mailto: garantiza que siempre funcione usando la app de correo del usuario.
+        // Usamos formsubmit.io nativo en una nueva pestaña
+        // Esto envía el correo y permite que FormSubmit.io muestre su UI de confirmación
+        // sin romper la web actual (SPA).
         setTimeout(() => {
-            const subject = encodeURIComponent(`Nuevo contacto desde tu Portfolio: ${name}`);
-            const body = encodeURIComponent(`${message}\n\n---\nEnviado por: ${name}\nEmail: ${email}`);
-            
-            // Abre el cliente de correo nativo
-            window.location.href = `mailto:rcarrerac01@gmail.com?subject=${subject}&body=${body}`;
+            const tempForm = document.createElement('form');
+            tempForm.action = "https://formsubmit.io/send/rcarrerac01@gmail.com";
+            tempForm.method = "POST";
+            tempForm.target = "_blank"; // Abre en nueva pestaña
+
+            const redirectInput = document.createElement('input');
+            redirectInput.type = 'hidden';
+            redirectInput.name = '_redirect';
+            redirectInput.value = window.location.href; 
+
+            // Campo honeypot de formsubmit.io
+            const honeypot = document.createElement('input');
+            honeypot.type = 'text';
+            honeypot.name = '_formsubmit_id';
+            honeypot.style.display = 'none';
+
+            const nameInput = document.createElement('input');
+            nameInput.type = 'hidden';
+            nameInput.name = 'Nombre';
+            nameInput.value = name;
+
+            const emailInput = document.createElement('input');
+            emailInput.type = 'hidden';
+            emailInput.name = 'Email';
+            emailInput.value = email;
+
+            const messageInput = document.createElement('input');
+            messageInput.type = 'hidden';
+            messageInput.name = 'Mensaje';
+            messageInput.value = message;
+
+            tempForm.appendChild(redirectInput);
+            tempForm.appendChild(honeypot);
+            tempForm.appendChild(nameInput);
+            tempForm.appendChild(emailInput);
+            tempForm.appendChild(messageInput);
+
+            document.body.appendChild(tempForm);
+            tempForm.submit();
+            document.body.removeChild(tempForm);
 
             // Simulamos éxito en la interfaz visual
-            btn.innerHTML = '<i class="fas fa-check"></i> Abriendo correo...';
+            btn.innerHTML = '<i class="fas fa-check"></i> Redirigiendo...';
             btn.classList.replace('from-violet-600', 'from-emerald-500');
             btn.classList.replace('to-cyan-500', 'to-teal-500');
             
