@@ -245,4 +245,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 11. Custom Dropdown Accordion for CV Competencies & Languages
+    const toggleBtns = document.querySelectorAll('.toggle-details-btn');
+    toggleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-target');
+            const targetContent = document.getElementById(targetId);
+            
+            if (targetContent) {
+                const isOpen = targetContent.classList.contains('open');
+                
+                if (isOpen) {
+                    targetContent.classList.remove('open');
+                    targetContent.style.maxHeight = '0px';
+                    btn.classList.remove('active');
+                } else {
+                    targetContent.classList.add('open');
+                    // Set max-height to scrollHeight for a perfectly timed, smooth slide-down animation
+                    targetContent.style.maxHeight = targetContent.scrollHeight + 'px';
+                    btn.classList.add('active');
+                }
+            }
+        });
+    });
+
 });
