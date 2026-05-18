@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start typing
     setTimeout(type, 1000);
 
-    // 10. Form Validation & Mailto
+    // 10. Form Validation & Send Email via FormSubmit
     const form = document.getElementById('contactForm');
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -220,14 +220,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = document.getElementById('email').value;
         const message = document.getElementById('message').value;
 
-        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Preparando...';
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Enviando...';
 
-        setTimeout(() => {
-            const subject = encodeURIComponent(`Nuevo contacto desde tu Portfolio: ${name}`);
-            const body = encodeURIComponent(`${message}\n\n---\nEnviado por: ${name}\nEmail: ${email}`);
-            window.location.href = `mailto:rcarrerac01@gmail.com?subject=${subject}&body=${body}`;
-
-            btn.innerHTML = '<i class="fas fa-check"></i> Abriendo correo...';
+        fetch("https://formsubmit.co/ajax/rcarrerac01@gmail.com", {
+            method: "POST",
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                Nombre: name,
+                Email: email,
+                Mensaje: message,
+                _subject: "Nuevo mensaje de contacto desde tu Portfolio!"
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            btn.innerHTML = '<i class="fas fa-check"></i> Enviado con éxito';
             btn.classList.replace('from-violet-600', 'from-emerald-500');
             btn.classList.replace('to-cyan-500', 'to-teal-500');
             
@@ -237,6 +247,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.replace('from-emerald-500', 'from-violet-600');
                 btn.classList.replace('to-teal-500', 'to-cyan-500');
             }, 3000);
-        }, 800);
+        })
+        .catch(error => {
+            console.error(error);
+            btn.innerHTML = '<i class="fas fa-times"></i> Error al enviar';
+            btn.classList.replace('from-violet-600', 'from-red-500');
+            btn.classList.replace('to-cyan-500', 'to-red-600');
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.replace('from-red-500', 'from-violet-600');
+                btn.classList.replace('to-red-600', 'to-cyan-500');
+            }, 3000);
+        });
     });
 });
