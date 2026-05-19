@@ -1,0 +1,10 @@
+Comandos de dependencias y scripts del proyecto:
+
+1. Instalación de dependencias (Tailwind CSS):
+   npm install -D tailwindcss
+
+2. Iniciar el servidor de desarrollo / compilación automática (Watch mode):
+   npm run dev
+
+3. Compilar y minificar el CSS para producción:
+   npm run build:css
