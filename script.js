@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start typing
     setTimeout(type, 1000);
 
-    // 10. Form Validation & Mailto Native
+    // 10. Form Validation & Formspree Submission
     const form = document.getElementById('contactForm');
     if (form) {
         form.addEventListener('submit', (e) => {
@@ -217,31 +217,50 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = form.querySelector('button[type="submit"]');
             const originalText = btn.innerHTML;
             
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const message = document.getElementById('message').value;
+            const formData = new FormData(form);
 
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Preparando...';
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Enviando...';
 
-            setTimeout(() => {
-                const subject = encodeURIComponent(`Nuevo contacto desde tu Portfolio: ${name}`);
-                const body = encodeURIComponent(`${message}\n\n---\nEnviado por: ${name}\nEmail: ${email}`);
-                
-                // Abre el cliente de correo nativo
-                window.location.href = `mailto:rcarrerac01@gmail.com?subject=${subject}&body=${body}`;
-
-                // Simulamos éxito en la interfaz visual
-                btn.innerHTML = '<i class="fas fa-check"></i> Abriendo correo...';
-                btn.classList.replace('from-violet-600', 'from-emerald-500');
-                btn.classList.replace('to-cyan-500', 'to-teal-500');
+            fetch(form.action, {
+                method: form.method,
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    btn.innerHTML = '<i class="fas fa-check"></i> Mensaje enviado';
+                    btn.classList.replace('from-violet-600', 'from-emerald-500');
+                    btn.classList.replace('to-cyan-500', 'to-teal-500');
+                    
+                    setTimeout(() => {
+                        form.reset();
+                        btn.innerHTML = originalText;
+                        btn.classList.replace('from-emerald-500', 'from-violet-600');
+                        btn.classList.replace('to-teal-500', 'to-cyan-500');
+                    }, 3000);
+                } else {
+                    btn.innerHTML = '<i class="fas fa-times"></i> Error al enviar';
+                    btn.classList.replace('from-violet-600', 'from-red-500');
+                    btn.classList.replace('to-cyan-500', 'to-orange-500');
+                    
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.classList.replace('from-red-500', 'from-violet-600');
+                        btn.classList.replace('to-orange-500', 'to-cyan-500');
+                    }, 3000);
+                }
+            }).catch(error => {
+                btn.innerHTML = '<i class="fas fa-times"></i> Error de red';
+                btn.classList.replace('from-violet-600', 'from-red-500');
+                btn.classList.replace('to-cyan-500', 'to-orange-500');
                 
                 setTimeout(() => {
-                    form.reset();
                     btn.innerHTML = originalText;
-                    btn.classList.replace('from-emerald-500', 'from-violet-600');
-                    btn.classList.replace('to-teal-500', 'to-cyan-500');
+                    btn.classList.replace('from-red-500', 'from-violet-600');
+                    btn.classList.replace('to-orange-500', 'to-cyan-500');
                 }, 3000);
-            }, 800);
+            });
         });
     }
 
